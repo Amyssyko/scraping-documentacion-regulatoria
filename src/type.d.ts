@@ -25,3 +25,13 @@ interface ResultadoTasas {
 	informacion_historica?: { notas: string[]; url: string } | undefined
 	error?: string | undefined
 }
+
+
+// Nuevo tipo para la tabla de control
+interface Ejecucion {
+  id: number;
+  fecha_creacion: string;
+  fecha_actualizacion: string | null;
+  fue_enviado: boolean;
+  resultado: ResultadoTasas;
+}

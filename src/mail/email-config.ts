@@ -1,9 +1,9 @@
 import nodemailer from 'nodemailer'
-import { envSchema } from '../schemas/envSchema.js'
+import { envData } from '@/utils/lib.js'
 
 // Configuración del transporter validada
 export function createEmailTransporter() {
-	const envData = envSchema.safeParse(process.env)
+	
 	if (!envData.success) {
 		throw new Error(
 			'Variables de entorno inválidas: ' +

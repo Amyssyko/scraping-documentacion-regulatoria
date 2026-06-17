@@ -4,4 +4,5 @@ node_modules/
 logs/
 dist/
 .continue/
-logs/
+.log
+.sqlite
