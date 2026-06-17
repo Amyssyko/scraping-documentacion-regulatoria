@@ -1,4 +1,15 @@
+import { envData } from "@/utils/lib.js"
+
 function generarCorreo(data: ResultadoTasas): string {
+
+  if (!envData.success) {
+		throw new Error(
+			'Variables de entorno inválidas: ' +
+				JSON.stringify(envData.error.message, null, 2)
+		)
+	}
+
+	const nombre_negocio = envData.data.NOMBRE_NEGOCIO
 	const COLORS = {
 		header: '#004422', // Verde oscuro
 		background: '#f4f8fb', // Azul muy claro
@@ -154,7 +165,7 @@ function generarCorreo(data: ResultadoTasas): string {
 
         <div class="footer">
           Atentamente,<br>
-          <strong>[Su Nombre]</strong><br>
+          <strong>${nombre_negocio}</strong><br>
           Cooperativa de Ahorro y Crédito CACPE Pastaza
         </div>
       </body>

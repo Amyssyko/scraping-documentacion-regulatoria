@@ -6,10 +6,11 @@ const envSchema = z.object({
 	EMAIL_PORT: z.string().transform((val) => parseInt(val, 10)),
 	EMAIL_USER: z.string().min(1, 'EMAIL_USER es requerido'),
 	EMAIL_PASS: z.string().min(1, 'EMAIL_PASS es requerido'),
-	EMAIL_FROM: z.string().email('EMAIL_FROM debe ser un correo válido'),
-	EMAIL_TO: z.string().email('EMAIL_TO debe ser un correo válido'),
-	EMAIL_CC: z.string().email().optional(),
-	EMAIL_BCC: z.string().email().optional()
+	EMAIL_FROM: z.email('EMAIL_FROM debe ser un correo válido'),
+	EMAIL_TO: z.string('EMAIL_TO debe ser un correo válido'),
+	EMAIL_CC: z.string().optional(),
+	EMAIL_BCC: z.string().optional(),
+	NOMBRE_NEGOCIO: z.string().min(1, 'NOMBRE_NEGOCIO es requerido')
 })
 
 // ✅ Validación de ResultadoTasas con Zod
