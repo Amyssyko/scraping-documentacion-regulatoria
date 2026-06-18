@@ -8,7 +8,7 @@
 		// Environment Settings
 		"module": "esnext",
 		"target": "esnext",
-		"types": ["bun", "node"],
+		"types": ["bun"],
 
 		// Other Outputs
 		"sourceMap": true,

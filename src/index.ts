@@ -1,7 +1,7 @@
 import main from '@/task/tasas-bce'
 import { logger } from '@/utils/logger'
 import cron from 'node-cron'
-
+await main()
 const task = cron.schedule('* * * * 1-5', async () => {
 	await main()
 })
