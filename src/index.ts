@@ -1,11 +1,9 @@
 import main from '@/task/tasas-bce'
 import { logger } from '@/utils/logger'
-import cron from 'node-cron'
-await main()
-const task = cron.schedule('* * * * 1-5', async () => {
+import { cron } from 'bun'
+
+cron('0 8 * * 1-5', async () => {
+	logger.info('Running task...')
 	await main()
+	logger.info('Task completed.')
 })
-logger.info(`Estado de la tarea: ${task.getStatus()}`) // 'scheduled', 'running', 'stopped'
-logger.info(
-	`Tarea programada para ejecutarse el ${task.getNextRun()?.toLocaleString()}`
-) // e.g. 2026-06-16T15:00:00.000Z
