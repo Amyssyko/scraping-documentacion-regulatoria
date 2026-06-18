@@ -1,13 +1,13 @@
-import nodemailer from 'nodemailer'
 import { envData } from '@/utils/lib.js'
+import nodemailer from 'nodemailer'
+import z from 'zod'
 
 // Configuración del transporter validada
 export function createEmailTransporter() {
-	
 	if (!envData.success) {
 		throw new Error(
 			'Variables de entorno inválidas: ' +
-				JSON.stringify(envData.error.message, null, 2)
+				JSON.stringify(z.treeifyError(envData.error), null, 2)
 		)
 	}
 

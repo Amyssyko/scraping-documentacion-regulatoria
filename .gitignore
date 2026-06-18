@@ -1,8 +1,7 @@
 .env.*
 !.env.example
 node_modules/
-logs/
 dist/
 .continue/
-.log
-.sqlite
+*.sqlite
+*.log

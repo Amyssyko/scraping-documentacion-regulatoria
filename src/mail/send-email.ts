@@ -30,7 +30,9 @@ export async function enviarCorreo(html: string, subject?: string) {
 	try {
 		const info = await transporter.sendMail(mailOptions)
 		console.log('Correo enviado:', info.messageId)
+		return true
 	} catch (err) {
 		console.error('Error al enviar correo:', err)
+		return false
 	}
 }

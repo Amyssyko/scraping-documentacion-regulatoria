@@ -1,11 +1,11 @@
-import { envData } from "@/utils/lib.js"
+import { envData } from '@/utils/lib.js'
+import z from 'zod'
 
 function generarCorreo(data: ResultadoTasas): string {
-
-  if (!envData.success) {
+	if (!envData.success) {
 		throw new Error(
 			'Variables de entorno inválidas: ' +
-				JSON.stringify(envData.error.message, null, 2)
+				JSON.stringify(z.treeifyError(envData.error), null, 2)
 		)
 	}
 

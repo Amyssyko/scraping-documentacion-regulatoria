@@ -4,10 +4,10 @@
 	"description": "Aplicación de scraping diseñada para extraer documentación oficial de webs reguladoras de instituciones. Utiliza Puppeteer para la extracción de datos y Nodemailer para enviar los informes por correo electrónico.",
 	"main": "src/index.ts",
 	"scripts": {
-		"dev": "bun --env-file=.env.dev --watch run src/index.ts",
-		"build": "bun --env-file=.env.prod run tsc",
-		"start": "bun --env-file=.env.prod run dist/index.js",
-		"test": "bun --env-file=.env.test run src/test.ts"
+		"dev": "cross-env NODE_OPTIONS=--use-system-ca bun --env-file=.env.dev --watch run src/index.ts",
+		"build": "cross-env NODE_OPTIONS=--use-system-ca bun --env-file=.env.prod run tsc",
+		"start": "cross-env NODE_ENV=production NODE_OPTIONS=--use-system-ca bun --env-file=.env.prod run dist/index.js",
+		"test": "cross-env NODE_OPTIONS=--use-system-ca bun --env-file=.env.test run src/test.ts"
 	},
 	"keywords": [
 		"scraping",
@@ -21,7 +21,9 @@
 	"license": "MIT",
 	"type": "module",
 	"dependencies": {
-		"nodemailer": "9.0.0",
+		"cross-env": "10.1.0",
+		"node-cron": "4.3.0",
+		"nodemailer": "9.0.1",
 		"puppeteer": "25.1.0",
 		"zod": "4.4.3"
 	},
