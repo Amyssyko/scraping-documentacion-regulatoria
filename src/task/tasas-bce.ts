@@ -1,14 +1,14 @@
-import { generarCorreo } from '@/mail/mail-template-tasas-bc.js'
-import { enviarCorreo } from '@/mail/send-email.js'
-import { resultadoTasasSchema } from '@/schemas/envSchema.js'
-import { scrapeBancoCentral } from '@/scraping/banco-central-tasas.js'
-import z from 'zod'
+import { generarCorreo } from '@/mail/mail-template-tasas-bc'
+import { enviarCorreo } from '@/mail/send-email'
+import { resultadoTasasSchema } from '@/schemas/envSchema'
+import { scrapeBancoCentral } from '@/scraping/banco-central-tasas'
 import {
 	marcarComoEnviado,
 	obtenerEjecucionesPendientes,
 	registrarEjecucionSiCambio
-} from './db.js'
-import { logger } from './logger.js'
+} from '@/utils/db'
+import { logger } from '@/utils/logger'
+import z from 'zod'
 
 async function main() {
 	const datos = await scrapeBancoCentral()

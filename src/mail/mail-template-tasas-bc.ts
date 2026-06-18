@@ -1,4 +1,4 @@
-import { envData } from '@/utils/lib.js'
+import { envData } from '@/utils/lib'
 import z from 'zod'
 
 function generarCorreo(data: ResultadoTasas): string {

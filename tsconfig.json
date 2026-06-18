@@ -6,9 +6,9 @@
 		"outDir": "./dist",
 
 		// Environment Settings
-		"module": "nodenext",
+		"module": "esnext",
 		"target": "esnext",
-		"types": ["bun"],
+		"types": ["bun", "node"],
 
 		// Other Outputs
 		"sourceMap": true,

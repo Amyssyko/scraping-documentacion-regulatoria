@@ -1,4 +1,4 @@
-import { createEmailTransporter } from './email-config.js'
+import { createEmailTransporter } from './email-config'
 
 // Función genérica para enviar correos con validación Zod
 export async function enviarCorreo(html: string, subject?: string) {

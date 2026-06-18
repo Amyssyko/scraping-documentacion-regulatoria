@@ -1,8 +1,8 @@
+import main from '@/task/tasas-bce'
+import { logger } from '@/utils/logger'
 import cron from 'node-cron'
-import { logger } from './utils/logger.js'
-import main from './utils/task.js'
 
-const task = cron.schedule('0 8 * * 1-5', async () => {
+const task = cron.schedule('* * * * 1-5', async () => {
 	await main()
 })
 logger.info(`Estado de la tarea: ${task.getStatus()}`) // 'scheduled', 'running', 'stopped'

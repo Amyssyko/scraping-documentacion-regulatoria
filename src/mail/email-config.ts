@@ -1,4 +1,4 @@
-import { envData } from '@/utils/lib.js'
+import { envData } from '@/utils/lib'
 import nodemailer from 'nodemailer'
 import z from 'zod'
 
@@ -16,13 +16,14 @@ export function createEmailTransporter() {
 	return {
 		transporter: nodemailer.createTransport({
 			host: env.EMAIL_HOST,
-			port: env.EMAIL_PORT || 587,
-			secure: false,
+			port: 465,
+			secure: true,
 			auth: {
 				user: env.EMAIL_USER,
 				pass: env.EMAIL_PASS
 			}
 		}),
+		tls: { rejectUnauthorized: false },
 		env
 	}
 }
