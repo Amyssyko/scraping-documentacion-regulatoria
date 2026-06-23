@@ -4,9 +4,9 @@
 	"description": "Aplicación de scraping diseñada para extraer documentación oficial de webs reguladoras de instituciones. Utiliza Puppeteer para la extracción de datos y Nodemailer para enviar los informes por correo electrónico.",
 	"main": "src/index.ts",
 	"scripts": {
-		"dev": "bun --env-file=.env.dev --watch run src/index.ts",
-		"build": "bun --env-file=.env.prod run tsc",
-		"start": "bun --env-file=.env.prod run dist/index.js",
+		"dev": "bun --env-file=.env.development --watch run src/index.ts",
+		"build": "bun --env-file=.env.production run tsc",
+		"start": "bun --env-file=.env.production run dist/index.js",
 		"test": "bun --env-file=.env.test run src/test.ts"
 	},
 	"keywords": [

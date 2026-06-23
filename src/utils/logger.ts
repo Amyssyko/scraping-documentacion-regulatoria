@@ -1,5 +1,5 @@
 // src/utils/logger.ts
-
+import { mkdir } from 'node:fs/promises'
 // 🎨 Colores ANSI para consola
 const COLORS = {
 	info: '\x1b[36m%s\x1b[0m', // Cyan
@@ -11,6 +11,13 @@ const COLORS = {
 // 📂 Carpeta de logs
 const LOG_DIR = 'logs'
 
+// ✅ Crear carpeta si no existe
+try {
+	await mkdir(LOG_DIR, { recursive: true })
+} catch (err) {
+	console.error('No se pudo crear la carpeta de logs:', err)
+}
+
 // 📝 Función auxiliar para escribir en archivo con Bun
 async function safeWrite(type: string, data: string) {
 	try {
@@ -20,6 +27,7 @@ async function safeWrite(type: string, data: string) {
 			.replace(/-/g, '-')
 		const file = Bun.file(`${LOG_DIR}/${type}-${dateStr}.log`)
 
+		// 👇 Aquí agregamos doble salto de línea
 		const line = `[${now.toLocaleString()}] [${type.toUpperCase()}] ${data}\n`
 
 		// ✅ Usar FileSink para escritura incremental
