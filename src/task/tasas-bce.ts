@@ -16,6 +16,7 @@ async function main() {
 		logger.error(`Error al obtener datos: ${datos.error}`)
 		return
 	}
+
 	await registrarEjecucionSiCambio(datos)
 
 	const respuesta = await obtenerEjecucionesPendientes()
@@ -44,7 +45,6 @@ async function main() {
 	}
 
 	logger.info('Email generado para Banco Central:')
-
 	const correoEnviado = await enviarCorreo(
 		emailTasasBC,
 		`Informe Tasas Banco Central - ${validadoData.data.fecha ?? 'Actualización'}`

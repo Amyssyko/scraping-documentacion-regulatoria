@@ -76,7 +76,8 @@ function parseTasas(data: string[][]): ResultadoTasas {
 		// Sección: Activas Máximas
 		if (idxMaximas !== -1 && idxReferenciales !== -1) {
 			const sectionRows = data.slice(idxMaximas, idxReferenciales)
-			result.tasas_activas_maximas.valores = toObject(sectionRows.slice(4))
+			// antes: sectionRows.slice(4)
+			result.tasas_activas_maximas.valores = toObject(sectionRows.slice(2))
 			result.tasas_activas_maximas.notas = extractNotas(sectionRows)
 			result.tasas_activas_maximas.urls = extractUrls(sectionRows)
 		}
@@ -84,8 +85,9 @@ function parseTasas(data: string[][]): ResultadoTasas {
 		// Sección: Activas Referenciales
 		if (idxReferenciales !== -1 && idxPasivasProm !== -1) {
 			const sectionRows = data.slice(idxReferenciales, idxPasivasProm)
+			// antes: sectionRows.slice(4)
 			result.tasas_activas_referenciales.valores = toObject(
-				sectionRows.slice(4)
+				sectionRows.slice(2)
 			)
 			result.tasas_activas_referenciales.notas = extractNotas(sectionRows)
 			result.tasas_activas_referenciales.urls = extractUrls(sectionRows)

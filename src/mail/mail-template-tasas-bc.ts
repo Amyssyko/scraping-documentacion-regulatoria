@@ -35,6 +35,10 @@ function generarCorreo(data: ResultadoTasas): string {
       margin: 0;
       padding: 20px;
     }
+   .container {
+        max-width: 900px;
+        margin: 0 auto;
+      }
     h1 {
       color: ${COLORS.h1};
       border-bottom: 3px solid ${COLORS.h1Border};
@@ -106,6 +110,7 @@ function generarCorreo(data: ResultadoTasas): string {
         <style>${styles}</style>
       </head>
       <body>
+       <div class="container">
         <h1>Informe de Tasas de Interés - Banco Central del Ecuador ${data.fecha ?? 'N/A'}</h1>
         <p>
           Estimados,<br><br>
@@ -168,10 +173,10 @@ function generarCorreo(data: ResultadoTasas): string {
           <strong>${nombre_negocio}</strong><br>
           Cooperativa de Ahorro y Crédito CACPE Pastaza
         </div>
+       </div>
       </body>
     </html>
   `
-
 	return html
 }
 
