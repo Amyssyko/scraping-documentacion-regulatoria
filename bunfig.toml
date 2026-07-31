@@ -1,17 +1,31 @@
 [console]
 depth = 4
+
 [install]
 smol = true
 exact = true
-frozenLockfile = true
+frozenLockfile = false
 linker = "isolated"
+
+saveTextLockfile = true
+
+auto = false
+
 [log]
-logLevel = "debug" # "debug" | "warn" | "error"
+logLevel = "warn"
+
 [test]
 coverage = true
-coverageThreshold = 0.9
+coverageThreshold = 0.90
+
 [watch]
-ignore = ["node_modules", "dist"]
+ignore = [
+    "node_modules",
+    "dist",
+    ".git"
+]
+
 coverageThreshold = { line = 0.9, function = 0.8, statement = 0.9 }
+
 [build]
 target = "esnext"
