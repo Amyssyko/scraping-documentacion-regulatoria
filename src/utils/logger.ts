@@ -1,109 +1,173 @@
 // src/utils/logger.ts
 
-import { mkdir } from 'node:fs/promises'
+import { appendFile, mkdir } from 'node:fs/promises'
+import { serializeMessage } from './error-handler'
 
 const COLORS = {
-  info: '\x1b[36m%s\x1b[0m',
-  warn: '\x1b[33m%s\x1b[0m',
-  error: '\x1b[31m%s\x1b[0m',
-  success: '\x1b[32m%s\x1b[0m'
-}
+	info: '\x1b[36m%s\x1b[0m',
+	warn: '\x1b[33m%s\x1b[0m',
+	error: '\x1b[31m%s\x1b[0m',
+	success: '\x1b[32m%s\x1b[0m'
+} as const
 
 const LOG_DIR = 'logs'
+
+const IS_PRODUCTION = process.env.NODE_ENV === 'production'
+
+// Cada cuánto escribir automáticamente en producción.
+const AUTO_FLUSH_INTERVAL = 30_000
 
 type LogType = 'info' | 'warn' | 'error' | 'success'
 
 interface LogItem {
-  type: LogType
-  message: string
-  date: Date
+	type: LogType
+	message: string
+	date: Date
 }
 
 const buffer: LogItem[] = []
 
+let flushing = false
+
 await mkdir(LOG_DIR, { recursive: true })
 
-function addLog(type: LogType, message: string) {
-  const item: LogItem = {
-    type,
-    message,
-    date: new Date()
-  }
+function print(type: LogType, message: string) {
+	const prefix = `[${type.toUpperCase()}] ${message}`
 
-  buffer.push(item)
+	switch (type) {
+		case 'info':
+			console.log(COLORS.info, prefix)
+			break
 
-  const prefix = `[${type.toUpperCase()}] ${message}`
+		case 'warn':
+			console.warn(COLORS.warn, prefix)
+			break
 
-  switch (type) {
-    case 'info':
-      console.log(COLORS.info, prefix)
-      break
+		case 'error':
+			console.error(COLORS.error, prefix)
+			break
 
-    case 'warn':
-      console.warn(COLORS.warn, prefix)
-      break
+		case 'success':
+			console.log(COLORS.success, prefix)
+			break
+	}
+}
 
-    case 'error':
-      console.error(COLORS.error, prefix)
-      break
+function addLog(type: LogType, message: unknown) {
+	const text = serializeMessage(message)
+	buffer.push({
+		type,
+		message: text,
+		date: new Date()
+	})
 
-    case 'success':
-      console.log(COLORS.success, prefix)
-      break
-  }
+	print(type, text)
+
+	// En desarrollo escribir inmediatamente
+	if (!IS_PRODUCTION) {
+		void flushLogs()
+	}
 }
 
 async function flushLogs() {
-  if (buffer.length === 0) {
-    return
-  }
+	if (flushing || buffer.length === 0) {
+		return
+	}
 
-  const agrupados = buffer
-    .map((log) => {
-      return `[${log.date.toISOString()}] [${log.type.toUpperCase()}] ${log.message}`
-    })
-    .join('\n')
+	flushing = true
 
-  const fecha = new Date().toLocaleDateString('en-CA', {
-    timeZone: 'America/Lima'
-  })
+	const pending = buffer.splice(0)
 
-  const file = Bun.file(`${LOG_DIR}/app-${fecha}.log`)
+	try {
+		const fecha = new Date().toLocaleDateString('en-CA', {
+			timeZone: 'America/Lima'
+		})
 
-  const writer = file.writer()
+		const content =
+			pending
+				.map(
+					(log) =>
+						`[${log.date.toISOString()}] [${log.type.toUpperCase()}] ${log.message}`
+				)
+				.join('\n') + '\n'
 
-  writer.write(agrupados + '\n')
+		await appendFile(`${LOG_DIR}/app-${fecha}.log`, content, 'utf8')
+	} catch (error) {
+		// Reinsertar para no perder información
+		buffer.unshift(...pending)
 
-  await writer.flush()
+		console.error(COLORS.error, '[LOGGER] Error escribiendo el archivo de logs')
 
-  writer.end()
+		console.error(error)
+	} finally {
+		flushing = false
 
-  // limpiar memoria
-  buffer.length = 0
+		// Si llegaron nuevos logs mientras escribíamos,
+		// programar otro flush.
+		if (buffer.length > 0) {
+			queueMicrotask(() => {
+				void flushLogs()
+			})
+		}
+	}
 }
 
 function getLogs() {
-  return [...buffer]
+	return [...buffer]
 }
 
+async function shutdown() {
+	try {
+		await flushLogs()
+	} catch {
+		// Ignorar durante el cierre
+	}
+}
+
+// Autoflush únicamente en producción
+if (IS_PRODUCTION) {
+	const timer = setInterval(() => {
+		void flushLogs()
+	}, AUTO_FLUSH_INTERVAL)
+
+	timer.unref()
+}
+
+// Cierre normal
+process.once('beforeExit', () => {
+	void shutdown()
+})
+
+// Ctrl+C
+process.once('SIGINT', async () => {
+	await shutdown()
+	process.exit(0)
+})
+
+// docker / systemd
+process.once('SIGTERM', async () => {
+	await shutdown()
+	process.exit(0)
+})
+
 export const logger = {
-  info(message: string) {
-    addLog('info', message)
-  },
+	info(message: unknown) {
+		addLog('info', message)
+	},
 
-  warn(message: string) {
-    addLog('warn', message)
-  },
+	warn(message: unknown) {
+		addLog('warn', message)
+	},
 
-  error(message: string) {
-    addLog('error', message)
-  },
+	error(message: unknown) {
+		addLog('error', message)
+	},
 
-  success(message: string) {
-    addLog('success', message)
-  },
+	success(message: unknown) {
+		addLog('success', message)
+	},
 
-  flush: flushLogs,
+	flush: flushLogs,
 
-  getLogs
+	getLogs
 }

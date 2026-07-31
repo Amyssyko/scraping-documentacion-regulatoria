@@ -1,3 +1,4 @@
+import type { ResultadoTasas } from '@/type'
 import { envData } from '@/utils/lib'
 import z from 'zod'
 

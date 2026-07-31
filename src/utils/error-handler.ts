@@ -1,15 +1,24 @@
-export function obtenerMensajeError(error: unknown): string {
-  if (error instanceof Error) {
-    return error.message
-  }
+function serializeMessage(message: unknown): string {
+	if (message instanceof Error) {
+		return `${message.name}: ${message.message}\n${message.stack ?? ''}`
+	}
 
-  if (typeof error === 'string') {
-    return error
-  }
+	if (message instanceof Event) {
+		return JSON.stringify({
+			type: message.type,
+			target: message.target?.constructor.name
+		})
+	}
 
-  if (typeof error === 'object' && error !== null && 'message' in error) {
-    return (error as { message: string }).message
-  }
+	if (typeof message === 'object') {
+		try {
+			return JSON.stringify(message, null, 2)
+		} catch {
+			return String(message)
+		}
+	}
 
-  return 'Error desconocido'
+	return String(message)
 }
+
+export { serializeMessage }
