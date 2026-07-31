@@ -30,6 +30,6 @@ async function ejecutarProceso() {
 	}
 }
 
-cron('0 13 * * 1-5', async () => {
+cron('0 13,15 * * 1-5', async () => {
 	await ejecutarProceso()
 })
