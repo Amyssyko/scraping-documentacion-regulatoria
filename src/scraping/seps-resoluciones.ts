@@ -132,17 +132,11 @@ export async function scrapeResolucionesSEPS(): Promise<Documento[]> {
 		)
 
 		const data = await page.evaluate(() => {
-			const tabla = Array.from(document.querySelectorAll('table')).find(
-				(table) => {
-					const texto = table.textContent?.toLowerCase() ?? ''
+			const tabla = Array.from(document.querySelectorAll('table')).find((table) => {
+				const texto = table.textContent?.toLowerCase() ?? ''
 
-					return (
-						texto.includes('resolución') &&
-						texto.includes('tema') &&
-						texto.includes('fecha')
-					)
-				}
-			)
+				return texto.includes('resolución') && texto.includes('tema') && texto.includes('fecha')
+			})
 
 			if (!tabla) {
 				return []

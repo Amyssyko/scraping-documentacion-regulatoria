@@ -5,8 +5,7 @@ import nodemailer from 'nodemailer'
 export function createEmailTransporter() {
 	if (!envData.success) {
 		throw new Error(
-			'Variables de entorno inválidas: ' +
-				JSON.stringify(envData.error.message, null, 2)
+			'Variables de entorno inválidas: ' + JSON.stringify(envData.error.message, null, 2)
 		)
 	}
 

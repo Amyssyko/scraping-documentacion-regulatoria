@@ -85,10 +85,7 @@ async function flushLogs() {
 
 		const content =
 			pending
-				.map(
-					(log) =>
-						`[${log.date.toISOString()}] [${log.type.toUpperCase()}] ${log.message}`
-				)
+				.map((log) => `[${log.date.toISOString()}] [${log.type.toUpperCase()}] ${log.message}`)
 				.join('\n') + '\n'
 
 		await appendFile(`${LOG_DIR}/app-${fecha}.log`, content, 'utf8')

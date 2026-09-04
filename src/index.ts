@@ -1,35 +1,29 @@
-import { logger } from '@/utils/logger'
-import { cron } from 'bun'
+// src/index.ts
+
+import type { CronOptions, CronWithAutocomplete } from 'bun'
+import { getEcuadorDateTime, timezone } from './lib/const'
 import { ejecutarWorker } from './utils/worker-runner'
-
-async function ejecutarTareas() {
-	return Promise.allSettled([
-		ejecutarWorker(
-			new URL('./worker/seps-resoluciones.worker.ts', import.meta.url)
-		),
-		ejecutarWorker(new URL('./worker/bce-tasas.worker.ts', import.meta.url))
-	])
+const workerUrl = new URL('./worker/index.ts', import.meta.url)
+const options: CronOptions = {
+	tz: timezone
 }
 
-async function ejecutarProceso() {
-	try {
-		logger.info('Iniciando proceso de scraping de tasas del Banco Central')
-		const resultados = await ejecutarTareas()
+const cronExpression: CronWithAutocomplete = '00 08,11 * * 1-5'
 
-		for (const resultado of resultados) {
-			if (resultado.status === 'rejected') {
-				logger.error(resultado.reason)
-			}
+Bun.cron(
+	cronExpression,
+	async () => {
+		console.log(`[cron] Iniciando ejecución del worker - ${getEcuadorDateTime()} (Ecuador)`)
+
+		try {
+			const result = await ejecutarWorker(workerUrl)
+
+			console.log(`[cron] Worker finalizado - ${getEcuadorDateTime()} (Ecuador):`, result)
+		} catch (error) {
+			console.error(`[cron] Error ejecutando worker - ${getEcuadorDateTime()} (Ecuador):`, error)
 		}
+	},
+	options
+)
 
-		logger.success('Procesos completados')
-	} catch (error) {
-		logger.error(error instanceof Error ? error.message : 'Error desconocido')
-	} finally {
-		await logger.flush()
-	}
-}
-
-cron('0 13,15 * * 1-5', async () => {
-	await ejecutarProceso()
-})
+console.log(`[app] Cron registrado. Esperando ejecución... Hora Ecuador: ${getEcuadorDateTime()}`)

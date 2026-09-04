@@ -93,9 +93,7 @@ function sonIguales(a: ResultadoTasas, b: ResultadoTasas): boolean {
 function registrarEjecucionSiCambio(resultado: ResultadoTasas): void {
 	const ultima = obtenerUltimaEjecucion()
 	if (ultima && sonIguales(ultima.resultado, resultado)) {
-		logger.info(
-			'No se insertó: la información es idéntica a la última ejecución.'
-		)
+		logger.info('No se insertó: la información es idéntica a la última ejecución.')
 		return
 	}
 

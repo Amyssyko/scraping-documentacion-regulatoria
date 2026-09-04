@@ -10,7 +10,8 @@ const envSchema = z.object({
 	EMAIL_TO: z.string('EMAIL_TO debe ser un correo válido'),
 	EMAIL_CC: z.string().optional(),
 	EMAIL_BCC: z.string().optional(),
-	NOMBRE_NEGOCIO: z.string().min(1, 'NOMBRE_NEGOCIO es requerido')
+	AREA: z.string().min(1, 'NOMBRE_NEGOCIO es requerido'),
+	EMPRESA: z.string().min(1, 'EMPRESA es requerido')
 })
 
 // ✅ Validación de ResultadoTasas con Zod

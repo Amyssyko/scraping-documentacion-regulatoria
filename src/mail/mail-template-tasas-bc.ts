@@ -5,12 +5,12 @@ import z from 'zod'
 function generarCorreo(data: ResultadoTasas): string {
 	if (!envData.success) {
 		throw new Error(
-			'Variables de entorno inválidas: ' +
-				JSON.stringify(z.treeifyError(envData.error), null, 2)
+			'Variables de entorno inválidas: ' + JSON.stringify(z.treeifyError(envData.error), null, 2)
 		)
 	}
 
-	const nombre_negocio = envData.data.NOMBRE_NEGOCIO
+	const nombre_negocio = envData.data.AREA
+	const empresa = envData.data.EMPRESA
 	const COLORS = {
 		header: '#004422', // Verde oscuro
 		background: '#f4f8fb', // Azul muy claro
@@ -94,15 +94,13 @@ function generarCorreo(data: ResultadoTasas): string {
 
 	// Función auxiliar para notas
 	const renderNotas = (notas?: string[]) =>
-		notas && notas.length > 0 ?
-			`<div class="notes">${notas.join('\n\n')}</div>`
-		:	''
+		notas && notas.length > 0 ? `<div class="notes">${notas.join('\n\n')}</div>` : ''
 
 	// Función auxiliar para enlaces
 	const renderUrls = (urls?: string[]) =>
-		urls && urls.length > 0 ?
-			`<ul>${urls.map((u) => `<li><a href="${u}">${u}</a></li>`).join('')}</ul>`
-		:	''
+		urls && urls.length > 0
+			? `<ul>${urls.map((u) => `<li><a href="${u}">${u}</a></li>`).join('')}</ul>`
+			: ''
 
 	// 📨 HTML del correo
 	const html = `
@@ -150,16 +148,16 @@ function generarCorreo(data: ResultadoTasas): string {
           <li>Metodología: <a href="${data.fuentes.metodologia ?? '#'}">${data.fuentes.metodologia ?? 'N/A'}</a></li>
           <li>Contacto: ${data.fuentes.contacto ?? 'N/A'}</li>
           ${
-						data.fuentes.resoluciones && data.fuentes.resoluciones.length > 0 ?
-							`<li>Resoluciones:<ul>${data.fuentes.resoluciones
-								.map((r) => `<li><a href="${r}">${r}</a></li>`)
-								.join('')}</ul></li>`
-						:	''
+						data.fuentes.resoluciones && data.fuentes.resoluciones.length > 0
+							? `<li>Resoluciones:<ul>${data.fuentes.resoluciones
+									.map((r) => `<li><a href="${r}">${r}</a></li>`)
+									.join('')}</ul></li>`
+							: ''
 					}
           ${
-						data.fuentes.historico ?
-							`<li>Histórico: <a href="${data.fuentes.historico}">${data.fuentes.historico}</a></li>`
-						:	''
+						data.fuentes.historico
+							? `<li>Histórico: <a href="${data.fuentes.historico}">${data.fuentes.historico}</a></li>`
+							: ''
 					}
         </ul>
 
@@ -172,7 +170,7 @@ function generarCorreo(data: ResultadoTasas): string {
         <div class="footer">
           Atentamente,<br>
           <strong>${nombre_negocio}</strong><br>
-          Cooperativa de Ahorro y Crédito CACPE Pastaza
+          <strong>${empresa}</strong><br>
         </div>
        </div>
       </body>

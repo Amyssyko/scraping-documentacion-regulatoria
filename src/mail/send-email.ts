@@ -21,8 +21,8 @@ export async function enviarCorreo(html: string, subject?: string) {
 	const mailOptions = {
 		from: env.EMAIL_FROM,
 		to: env.EMAIL_TO,
-		cc: env.EMAIL_CC,
-		bcc: env.EMAIL_BCC,
+		cc: env.EMAIL_CC!,
+		bcc: env.EMAIL_BCC!,
 		subject: subject ?? `Informe - ${date}`,
 		html // aquí siempre es string
 	}
