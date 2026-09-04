@@ -3,12 +3,16 @@
 import type { CronOptions, CronWithAutocomplete } from 'bun'
 import { getEcuadorDateTime, timezone } from './lib/const'
 import { ejecutarWorker } from './utils/worker-runner'
-const workerUrl = new URL('./worker/index.ts', import.meta.url)
+const workerUrl = new URL(
+	import.meta.env.NODE_ENV === 'production' ? './worker/index.js' : './worker/index.ts',
+	import.meta.url
+)
+
 const options: CronOptions = {
 	tz: timezone
 }
 
-const cronExpression: CronWithAutocomplete = '00 08,11 * * 1-5'
+const cronExpression: CronWithAutocomplete = '0 8,11 * * 1-5'
 
 Bun.cron(
 	cronExpression,

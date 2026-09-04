@@ -8,8 +8,11 @@ module.exports = {
 			exec_mode: 'fork',
 			instances: 1,
 			autorestart: true,
-			watch: false,
+			watch: true,
 			max_memory_restart: '500M',
+			out_file: './logs/out.log',
+			error_file: './logs/error.log',
+			time: true,
 			env: {
 				NODE_ENV: 'production'
 			}
