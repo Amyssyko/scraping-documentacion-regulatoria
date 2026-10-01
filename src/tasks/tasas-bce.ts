@@ -13,6 +13,7 @@ import z from 'zod'
 async function taskTasasBCE(): Promise<ResultaTask> {
 	logger.info('Iniciando tarea de scraping de tasas del Banco Central...')
 	const datos = await scrapeBancoCentral()
+
 	if (datos.error || datos.fecha === null) {
 		logger.error(`Error al obtener datos: ${datos.error}`)
 		return {
@@ -85,3 +86,5 @@ async function taskTasasBCE(): Promise<ResultaTask> {
 }
 
 export { taskTasasBCE }
+
+await taskTasasBCE()

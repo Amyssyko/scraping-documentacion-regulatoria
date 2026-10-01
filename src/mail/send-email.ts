@@ -1,3 +1,4 @@
+import { logger } from '@/utils/logger'
 import { createEmailTransporter } from './email-config'
 
 // Función genérica para enviar correos con validación Zod
@@ -18,6 +19,7 @@ export async function enviarCorreo(html: string, subject?: string) {
 		minute: '2-digit'
 	})
 
+
 	const mailOptions = {
 		from: env.EMAIL_FROM,
 		to: env.EMAIL_TO,
@@ -28,11 +30,22 @@ export async function enviarCorreo(html: string, subject?: string) {
 	}
 
 	try {
+		logger.info(`Verificando servidor de correo...`)	
+        const response = await transporter.verify()
+		logger.info(`Respuesta de verificación: ${response}`)
+
+		if (!response) {
+			logger.error('No se pudo verificar el servidor de correo.')
+			return false
+		}
+
+		logger.info('Servidor verificado correctamente. Enviando correo...')
+
 		const info = await transporter.sendMail(mailOptions)
-		console.log('Correo enviado:', info.messageId)
+		logger.info(`Correo enviado: ${info.messageId}`)
 		return true
 	} catch (err) {
-		console.error('Error al enviar correo:', err)
+		logger.error(`Error al enviar correo: ${err}`)
 		return false
 	}
 }

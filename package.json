@@ -8,6 +8,7 @@
 		"typecheck:watch": "tsc --noEmit --watch",
 		"format": "prettier --write \".\"",
 		"format:check": "prettier --check \".\"",
+		"postinstall": "bunx puppeteer browsers install chrome",
 		"dev": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0  bun --env-file=.env.dev --watch run src/index.ts",
 		"build": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 bun --env-file=.env.prod run tsc",
 		"start": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 bun --env-file=.env.prod run dist/index.js",
@@ -26,17 +27,17 @@
 	"type": "module",
 	"dependencies": {
 		"@js-temporal/polyfill": "0.5.1",
-		"nodemailer": "10.0.0",
-		"puppeteer": "25.10.0",
-		"zod": "4.5.4"
+		"nodemailer": "10.0.13",
+		"puppeteer": "25.12.0",
+		"zod": "4.6.5"
 	},
 	"devDependencies": {
-		"@types/bun": "1.4.1",
-		"@types/nodemailer": "8.0.1",
+		"@types/bun": "1.4.2",
+		"@types/nodemailer": "8.0.2",
 		"cross-env": "10.1.0",
-		"tsx": "4.23.13",
-		"prettier": "3.9.6",
-		"typescript": "7.0.2"
+		"tsx": "4.23.15",
+		"prettier": "3.9.9",
+		"typescript": "6.0.3"
 	},
-	"packageManager": "bun@1.4.1"
+	"packageManager": "bun@1.4.2"
 }

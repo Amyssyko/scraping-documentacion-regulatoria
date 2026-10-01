@@ -178,3 +178,6 @@ export async function scrapeBancoCentral(): Promise<ResultadoTasas> {
 		}
 	}
 }
+const result = await scrapeBancoCentral()
+
+console.log(result.fecha)
